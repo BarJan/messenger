@@ -35,29 +35,35 @@ from selenium.webdriver.common.by import By
 import time
 import sys
 from selenium.webdriver.firefox.options import Options
-
+from selenium.webdriver.common.action_chains import ActionChains
 options = Options()
 #options.headless = True
-driver = webdriver.Firefox(options=options, executable_path=r'C:/Users/barjan/Desktop/Bar/voice_recog/geckodriver/geckodriver.exe')
+driver = webdriver.Chrome('./chromedriver_win32/chromedriver.exe')
 
-driver.get("https://web.whatsapp.com/")
+driver.get('https://web.whatsapp.com/')
 wait = WebDriverWait(driver, 600)
 
 # Replace 'Friend's Name' with the name of your friend 
 # or the name of a group 
-target = '"תומר יונה"'
+target = "שקד אחי"
 
 # Replace the below string with your own message
-string = "hello"
+string = "היי זו הודעה אוטומטית מבר"
+inp_xpath_search = "//div[@title='New chat']"
+input_box_search = WebDriverWait(driver,50).until(lambda driver: driver.find_element_by_xpath(inp_xpath_search))
+input_box_search.click()
+time.sleep(5)
 
-x_arg = '//span[contains(@title,' + target + ')]'
+actions = ActionChains(driver)
+actions.send_keys(target)
+actions.perform()
+
+x_arg = '//span[contains(@title,\'' + target + '\')]'
 group_title = wait.until(EC.presence_of_element_located((
 	By.XPATH, x_arg)))
 group_title.click()
 
-
 message = driver.find_elements_by_xpath('//*[@id="main"]/footer/div[1]/div[2]/div/div[2]')[0]
-
 
 message.send_keys(string)
 
@@ -67,7 +73,8 @@ sendbutton.click()
 driver.close()
     
     
-'''from selenium import webdriver
+'''
+from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 
 options = Options()
